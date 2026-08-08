@@ -1,0 +1,147 @@
+---
+import DeviceFrame from '../components/DeviceFrame.astro';
+import { screens } from '../data/screens';
+import { stake } from '../data/site';
+---
+
+<section class="hero">
+  <div class="container hero-inner">
+    <div class="hero-copy">
+      <p class="eyebrow">Fitness goals, with skin in the game</p>
+
+      <h1 class="t-hero hero-title">
+        put money on it.<br />
+        <span class="accent">then go get it back.</span>
+      </h1>
+
+      <p class="t-subhead hero-sub">
+        Stake from ${stake.min} on a goal you set yourself. Do the work and you
+        <strong>crack</strong> the Lock — your stake comes straight back. Come up short and
+        you're <strong>locked out</strong>, and it goes where you chose up front.
+      </p>
+
+      <div class="hero-actions">
+        <a class="btn btn-accent btn-lg" href="#waitlist">Join the waitlist</a>
+        <a class="btn btn-ghost btn-lg" href="#outcomes">See how it settles</a>
+      </div>
+
+      <ul class="hero-facts t-caption" role="list">
+        <li>Stakes from ${stake.min} to ${stake.max}</li>
+        <li>Verified from apps you already use</li>
+        <li>Nothing to log in Lockd</li>
+      </ul>
+    </div>
+
+    <div class="hero-visual">
+      <DeviceFrame
+        screen={screens.home}
+        width={310}
+        priority
+        glow
+        sizes="(max-width: 700px) 70vw, 310px"
+      />
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    padding-block: var(--space-8) var(--space-9);
+    overflow: hidden;
+  }
+
+  /* Single-hue ambient wash. No second accent. */
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset-inline: -20%;
+    top: -30%;
+    height: 90%;
+    background: radial-gradient(
+      50% 50% at 50% 50%,
+      rgba(219, 253, 0, 0.07),
+      transparent 70%
+    );
+    pointer-events: none;
+  }
+
+  .hero-inner {
+    position: relative;
+    display: grid;
+    gap: var(--space-8);
+    align-items: center;
+  }
+
+  .hero-title {
+    margin-block: var(--space-4) 0;
+    text-wrap: balance;
+  }
+
+  .accent {
+    color: var(--accent);
+  }
+
+  .hero-sub {
+    margin-top: var(--space-5);
+    max-width: 46ch;
+    color: var(--text-muted);
+  }
+
+  .hero-sub strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-6);
+  }
+
+  .hero-facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-5);
+    margin-top: var(--space-6);
+    padding: 0;
+    list-style: none;
+    color: var(--text-dim);
+  }
+
+  .hero-facts li {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .hero-facts li::before {
+    content: '';
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex: none;
+  }
+
+  .hero-visual {
+    display: flex;
+    justify-content: center;
+  }
+
+  @media (min-width: 900px) {
+    .hero {
+      padding-block: var(--space-9) var(--space-10);
+    }
+
+    .hero-inner {
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: var(--space-9);
+    }
+
+    .hero-visual {
+      justify-content: flex-end;
+    }
+  }
+</style>

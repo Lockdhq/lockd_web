@@ -1,0 +1,439 @@
+---
+/**
+ * The centrepiece. Mirrors lock-stake.png — the clearest single explainer of the
+ * product — as a live control.
+ *
+ * Accessibility notes:
+ *  - Native <input type="range">, so arrows / Home / End / Page keys come free.
+ *  - aria-valuetext announces money and consequence, not a bare number.
+ *  - Both outcomes are always on screen; neither is behind an interaction.
+ *  - Each outcome carries icon + word + signed amount, never colour alone.
+ *  - Without JS the section renders a valid, meaningful $10 state.
+ */
+import DeviceFrame from '../components/DeviceFrame.astro';
+import { screens } from '../data/screens';
+import { stake } from '../data/site';
+---
+
+<section id="stake" class="section stake">
+  <div class="container">
+    <header class="section-head" data-reveal>
+      <p class="eyebrow">Set the price of quitting</p>
+      <h2 class="t-display">how much is it worth?</h2>
+      <p class="t-subhead section-lede">
+        Enough to sting, not enough to hurt. Move the slider and watch both endings change.
+        This is the real range in the app — ${stake.min} to ${stake.max}.
+      </p>
+    </header>
+
+    <div class="stake-layout">
+      <div class="stake-tool card" data-stake-tool data-reveal>
+        <div class="stake-readout">
+          <p class="t-overline stake-readout-label">Your stake</p>
+          <p class="stake-value tnum">
+            <span class="stake-currency">$</span><output
+              id="stake-amount"
+              for="stake-range"
+              data-stake-value>{stake.default}</output
+            >
+            <span class="stake-unit">USDC</span>
+          </p>
+        </div>
+
+        <div class="stake-control">
+          <label class="visually-hidden" for="stake-range">
+            Stake amount in US dollars, between ${stake.min} and ${stake.max}
+          </label>
+          <input
+            id="stake-range"
+            type="range"
+            min={stake.min}
+            max={stake.max}
+            step="1"
+            value={stake.default}
+            data-stake-range
+            aria-valuetext={`$${stake.default} — you get $${stake.default} back if you crack it, and $${stake.default} goes to your forfeit if you're locked out`}
+          />
+          <div class="stake-bounds t-caption tnum" aria-hidden="true">
+            <span>${stake.min}</span>
+            <span>${stake.max}</span>
+          </div>
+        </div>
+
+        <div class="stake-presets" role="group" aria-label="Quick stake amounts">
+          {
+            stake.presets.map((amount) => (
+              <button
+                type="button"
+                class="chip"
+                data-stake-preset={amount}
+                aria-pressed={amount === stake.default ? 'true' : 'false'}
+              >
+                ${amount}
+              </button>
+            ))
+          }
+        </div>
+
+        <div class="stake-outcomes">
+          <div class="stake-outcome stake-outcome-crack">
+            <p class="stake-outcome-head">
+              <span class="stake-outcome-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none">
+                  <path
+                    d="m4.5 12.5 5 5 10-11"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"></path>
+                </svg>
+              </span>
+              If you crack it
+            </p>
+            <p class="stake-outcome-amount tnum" data-stake-crack>+${stake.default}</p>
+            <p class="stake-outcome-note t-caption">Back in your vault</p>
+          </div>
+
+          <div class="stake-outcome stake-outcome-out">
+            <p class="stake-outcome-head">
+              <span class="stake-outcome-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none">
+                  <path
+                    d="M6 6l12 12M18 6L6 18"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"></path>
+                </svg>
+              </span>
+              If you're locked out
+            </p>
+            <p class="stake-outcome-amount tnum" data-stake-out>−${stake.default}</p>
+            <p class="stake-outcome-note t-caption">Goes to your forfeit</p>
+          </div>
+        </div>
+
+        <p class="stake-foot t-caption">
+          Crack it and the full amount comes back — the figure you staked, not a reduced one.
+        </p>
+
+        <p class="visually-hidden" role="status" aria-live="polite" data-stake-live></p>
+      </div>
+
+      <div class="stake-shot" data-reveal>
+        <DeviceFrame screen={screens.lockStake} width={272} sizes="(max-width: 900px) 62vw, 272px" />
+        <p class="t-caption stake-shot-cap">Step 2 of 5 in the app.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const MIN = 2;
+  const MAX = 25;
+
+  document.querySelectorAll<HTMLElement>('[data-stake-tool]').forEach((tool) => {
+    const range = tool.querySelector<HTMLInputElement>('[data-stake-range]');
+    const value = tool.querySelector<HTMLElement>('[data-stake-value]');
+    const crack = tool.querySelector<HTMLElement>('[data-stake-crack]');
+    const out = tool.querySelector<HTMLElement>('[data-stake-out]');
+    const live = tool.querySelector<HTMLElement>('[data-stake-live]');
+    const presets = tool.querySelectorAll<HTMLButtonElement>('[data-stake-preset]');
+
+    if (!range || !value || !crack || !out) return;
+
+    let liveTimer: number | undefined;
+
+    const paint = (amount: number) => {
+      value.textContent = String(amount);
+      crack.textContent = `+$${amount}`;
+      out.textContent = `−$${amount}`;
+
+      range.setAttribute(
+        'aria-valuetext',
+        `$${amount} — you get $${amount} back if you crack it, and $${amount} goes to your forfeit if you're locked out`
+      );
+
+      // Fill the track up to the thumb.
+      const pct = ((amount - MIN) / (MAX - MIN)) * 100;
+      range.style.setProperty('--fill', `${pct}%`);
+
+      presets.forEach((btn) => {
+        const isOn = Number(btn.dataset.stakePreset) === amount;
+        btn.setAttribute('aria-pressed', isOn ? 'true' : 'false');
+      });
+
+      // Debounced, so dragging doesn't flood a screen reader.
+      if (live) {
+        window.clearTimeout(liveTimer);
+        liveTimer = window.setTimeout(() => {
+          live.textContent = `Stake $${amount}. Crack it and $${amount} returns to your vault. Locked out and $${amount} goes to your forfeit.`;
+        }, 400);
+      }
+    };
+
+    range.addEventListener('input', () => paint(Number(range.value)));
+
+    presets.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const amount = Number(btn.dataset.stakePreset);
+        range.value = String(amount);
+        paint(amount);
+      });
+    });
+
+    paint(Number(range.value));
+  });
+</script>
+
+<style>
+  .stake-layout {
+    display: grid;
+    gap: var(--space-7);
+    margin-top: var(--space-7);
+    align-items: center;
+  }
+
+  .stake-tool {
+    padding: var(--space-6);
+  }
+
+  .stake-readout-label {
+    color: var(--text-dim);
+  }
+
+  .stake-value {
+    margin-top: var(--space-2);
+    display: flex;
+    align-items: baseline;
+    gap: 2px;
+    font-size: clamp(3rem, 11vw, 4.25rem);
+    font-weight: 700;
+    letter-spacing: -0.045em;
+    line-height: 1;
+    color: var(--accent);
+  }
+
+  .stake-currency {
+    font-size: 0.6em;
+  }
+
+  .stake-unit {
+    margin-inline-start: var(--space-3);
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .stake-control {
+    margin-top: var(--space-6);
+  }
+
+  .stake-bounds {
+    display: flex;
+    justify-content: space-between;
+    margin-top: var(--space-2);
+    color: var(--text-dim);
+  }
+
+  /* ---- Range input ---- */
+  input[type='range'] {
+    --fill: 33%;
+    width: 100%;
+    appearance: none;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  input[type='range']::-webkit-slider-runnable-track {
+    height: 8px;
+    border-radius: 99px;
+    background: linear-gradient(
+      to right,
+      var(--accent) 0 var(--fill),
+      var(--control) var(--fill) 100%
+    );
+  }
+
+  input[type='range']::-moz-range-track {
+    height: 8px;
+    border-radius: 99px;
+    background: linear-gradient(
+      to right,
+      var(--accent) 0 var(--fill),
+      var(--control) var(--fill) 100%
+    );
+  }
+
+  input[type='range']::-webkit-slider-thumb {
+    appearance: none;
+    width: 28px;
+    height: 28px;
+    margin-top: -10px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 3px solid var(--bg);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+    transition: transform var(--dur-fast) var(--ease-standard);
+  }
+
+  input[type='range']::-moz-range-thumb {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 3px solid var(--bg);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+  }
+
+  input[type='range']:active::-webkit-slider-thumb {
+    transform: scale(1.12);
+  }
+
+  input[type='range']:focus-visible {
+    outline: none;
+  }
+
+  input[type='range']:focus-visible::-webkit-slider-thumb {
+    box-shadow: 0 0 0 4px var(--bg), 0 0 0 7px var(--accent);
+  }
+
+  input[type='range']:focus-visible::-moz-range-thumb {
+    box-shadow: 0 0 0 4px var(--bg), 0 0 0 7px var(--accent);
+  }
+
+  /* ---- Presets ---- */
+  .stake-presets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-top: var(--space-5);
+  }
+
+  .chip {
+    padding: 9px 18px;
+    border-radius: 99px;
+    border: 1px solid var(--border-strong);
+    background: var(--control);
+    color: var(--text-muted);
+    font: inherit;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    cursor: pointer;
+    transition:
+      background var(--dur-fast) var(--ease-standard),
+      color var(--dur-fast) var(--ease-standard),
+      border-color var(--dur-fast) var(--ease-standard);
+  }
+
+  .chip:hover {
+    color: var(--text);
+    border-color: var(--text-dim);
+  }
+
+  .chip[aria-pressed='true'] {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--accent-on);
+  }
+
+  /* ---- Outcome panels ---- */
+  .stake-outcomes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-3);
+    margin-top: var(--space-6);
+  }
+
+  .stake-outcome {
+    padding: var(--space-4);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+  }
+
+  .stake-outcome-crack {
+    background: var(--accent-tint);
+    border-color: color-mix(in srgb, var(--accent) 26%, transparent);
+  }
+
+  .stake-outcome-out {
+    background: var(--danger-tint);
+    border-color: color-mix(in srgb, var(--danger) 26%, transparent);
+  }
+
+  .stake-outcome-head {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+
+  .stake-outcome-icon {
+    display: grid;
+    place-items: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    flex: none;
+  }
+
+  .stake-outcome-crack .stake-outcome-icon {
+    background: var(--accent-dim);
+    color: var(--accent);
+  }
+
+  .stake-outcome-out .stake-outcome-icon {
+    background: var(--danger-tint);
+    color: var(--danger-soft);
+  }
+
+  .stake-outcome-amount {
+    margin-top: var(--space-3);
+    font-size: clamp(1.75rem, 5.5vw, 2.25rem);
+    font-weight: 700;
+    letter-spacing: -0.035em;
+    line-height: 1;
+  }
+
+  .stake-outcome-crack .stake-outcome-amount {
+    color: var(--accent);
+  }
+
+  .stake-outcome-out .stake-outcome-amount {
+    color: var(--danger);
+  }
+
+  .stake-outcome-note {
+    margin-top: var(--space-2);
+    color: var(--text-muted);
+  }
+
+  .stake-foot {
+    margin-top: var(--space-5);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--border);
+    color: var(--text-dim);
+  }
+
+  .stake-shot {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  .stake-shot-cap {
+    color: var(--text-dim);
+  }
+
+  @media (min-width: 900px) {
+    .stake-layout {
+      grid-template-columns: 1fr auto;
+      gap: var(--space-8);
+    }
+  }
+</style>

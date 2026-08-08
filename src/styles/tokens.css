@@ -1,0 +1,98 @@
+/**
+ * lockd design tokens
+ *
+ * SOURCE OF TRUTH: BRIEF.md §5. Every value below is that table, verbatim.
+ *
+ * ⚠️ Do NOT sync these from `lockd_mobile/src/theme.ts`. The copy reachable on `main`
+ * is pre-redesign and still says `#C5FF3D`. The redesign that produced `#DBFD00` and
+ * the screenshots in `public/screens/` is uncommitted in another worktree.
+ * Measured proof: `#DBFD00` is the dominant accent in `home.png` (193,709 px) and
+ * `lock-stake.png` (190,762 px). See AGENTS.md § Design tokens.
+ */
+
+:root {
+  /* ---- Colour ------------------------------------------------------------ */
+  --bg: #000000;
+  --bg-elevated: #0a0a0a;
+  --panel: #101010;
+  --surface: #141414;
+  --surface-strong: #232323;
+  --glass: rgba(255, 255, 255, 0.08);
+  --border: rgba(255, 255, 255, 0.12);
+  --border-strong: rgba(255, 255, 255, 0.24);
+
+  --text: #ffffff;
+  --text-muted: rgba(255, 255, 255, 0.72);
+  --text-dim: rgba(255, 255, 255, 0.46);
+
+  --accent: #dbfd00;
+  --accent-soft: #efff8c;
+  --accent-dim: rgba(219, 253, 0, 0.18);
+
+  --on-light: #fffafa;
+  --control-light: #d9d9d9;
+
+  --danger: #ff5757; /* Locked Out */
+  --warning: #ffb020; /* deadline pressure */
+  --bronze: #c8a590;
+
+  /* Derived from the tokens above — tinted fills for the outcome pair. No new
+     hue is introduced; these are alpha variants of --accent and --danger. */
+  --accent-tint: rgba(219, 253, 0, 0.07);
+  --danger-tint: rgba(255, 87, 87, 0.09);
+  --danger-soft: #ff8f8f; /* danger lightened for small text on black — see a11y notes */
+
+  /* ---- Spacing ----------------------------------------------------------- */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-xxl: 48px;
+  --space-xxxl: 64px;
+
+  /* ---- Radius ------------------------------------------------------------ */
+  --radius-pill: 999px;
+  --radius-card: 20px;
+  --radius-button: 32px;
+  --radius-input: 16px;
+  --radius-panel: 36px;
+  --radius-hero: 28px;
+
+  /* ---- Motion ------------------------------------------------------------ */
+  --duration-instant: 80ms;
+  --duration-fast: 160ms;
+  --duration-normal: 240ms;
+  --duration-slow: 360ms;
+  --duration-max: 500ms; /* hard ceiling — motion-guidelines.md */
+
+  --ease-enter: cubic-bezier(0, 0, 0.2, 1);
+  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+  --ease-move: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ---- Type -------------------------------------------------------------- */
+  /* theme.ts: "we approximate with Inter (or system on web)". We take the
+     system option deliberately — the screenshots are iOS, so system-ui renders
+     the exact SF Pro the captures show on the platform most traffic arrives on,
+     at 0 bytes and with no FOUT. Inter is named first for anyone who has it. */
+  --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    Roboto, sans-serif;
+
+  /* Desktop px values from the app scale. Fluid clamps live in base.css so the
+     52px hero stays legible at 390px without inventing a second scale. */
+  --size-hero: 52px;
+  --size-display: 46px;
+  --size-title: 32px;
+  --size-subhead: 20px;
+  --size-body: 16px;
+  --size-caption: 13px;
+  --size-legal: 12px;
+  --size-button: 17px;
+  --size-overline: 12px;
+
+  /* ---- Layout ------------------------------------------------------------ */
+  --measure: 60ch;
+  --container: 1140px;
+  --container-narrow: 760px;
+  --header-h: 64px;
+}

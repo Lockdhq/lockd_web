@@ -1,0 +1,99 @@
+---
+/**
+ * Sourced entirely from fitness-oracle.md §12 (decision mapping + failure
+ * defaults). Nothing here is invented:
+ *
+ *   "Never REJECT / lock_out because Strava returned 429 or Health sync failed."
+ *   INCONCLUSIVE → escalate to Spotter → 48h silence → crack.
+ *
+ * This is the strongest trust material available for a product that holds money,
+ * so it gets its own section rather than a line in the FAQ.
+ */
+const rules = [
+  {
+    title: 'A sync failure is never your fault',
+    body: 'If Strava rate-limits us or a health sync drops, that is our problem, not yours. A Lock is never settled as locked out because our side of the pipe broke.',
+  },
+  {
+    title: "Unclear goes to a human",
+    body: "When the data can't answer the question either way, the Lock doesn't guess. It escalates to your Spotter, who can see what happened and make the call.",
+  },
+  {
+    title: 'Silence resolves in your favour',
+    body: 'If nobody answers within 48 hours, the Lock cracks. The default when the system is unsure is that you keep your money.',
+  },
+] as const;
+---
+
+<section id="fairness" class="section fairness">
+  <div class="container">
+    <header class="section-head" data-reveal>
+      <p class="eyebrow">When the data is messy</p>
+      <h2 class="t-display">the benefit of the doubt is yours</h2>
+      <p class="t-subhead section-lede">
+        Fitness data is imperfect — watches die, apps go down, sessions sync late. Here's what
+        happens when the record isn't clean.
+      </p>
+    </header>
+
+    <ol class="fair-list" role="list">
+      {
+        rules.map((rule, i) => (
+          <li class="fair-item" data-reveal>
+            <p class="fair-n tnum" aria-hidden="true">
+              {String(i + 1).padStart(2, '0')}
+            </p>
+            <h3 class="fair-title">{rule.title}</h3>
+            <p class="fair-body">{rule.body}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .fair-list {
+    list-style: none;
+    padding: 0;
+    margin-top: var(--space-7);
+    display: grid;
+    gap: var(--space-4);
+    counter-reset: fair;
+  }
+
+  .fair-item {
+    position: relative;
+    padding: var(--space-6);
+    border-radius: var(--radius-card);
+    background: var(--surface);
+    border: 1px solid var(--border);
+  }
+
+  .fair-n {
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    color: var(--accent);
+  }
+
+  .fair-title {
+    margin-top: var(--space-4);
+    font-size: 1.1875rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  .fair-body {
+    margin-top: var(--space-3);
+    color: var(--text-muted);
+  }
+
+  @media (min-width: 860px) {
+    .fair-list {
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-5);
+    }
+  }
+</style>

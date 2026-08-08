@@ -1,0 +1,90 @@
+---
+import '../styles/base.css';
+import { site } from '../data/site';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title = site.title, description = site.description } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url).href;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+
+    <meta name="theme-color" content="#000000" />
+    <meta name="color-scheme" content="dark" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+  </head>
+
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <SiteHeader />
+    <main id="main">
+      <slot />
+    </main>
+    <SiteFooter />
+
+    <script>
+      // Reveal-on-scroll. Progressive enhancement: without JS, or with reduced
+      // motion, [data-reveal] elements are already visible (see base.css).
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+      if (!reduced.matches) {
+        const targets = document.querySelectorAll<HTMLElement>('[data-reveal]');
+        targets.forEach((el) => el.classList.add('reveal-armed'));
+
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (!entry.isIntersecting) continue;
+              entry.target.classList.add('reveal-in');
+              io.unobserve(entry.target);
+            }
+          },
+          { rootMargin: '0px 0px -12% 0px', threshold: 0.08 }
+        );
+
+        targets.forEach((el) => io.observe(el));
+      }
+    </script>
+
+    <style is:global>
+      /* Armed by JS only, so no-JS and reduced-motion users never see hidden content. */
+      [data-reveal].reveal-armed {
+        opacity: 0;
+        transform: translateY(14px);
+      }
+
+      [data-reveal].reveal-in {
+        opacity: 1;
+        transform: none;
+        /* 400ms — inside the 500ms ceiling in BRIEF §5. */
+        transition:
+          opacity 400ms var(--ease-enter),
+          transform 400ms var(--ease-enter);
+      }
+    </style>
+  </body>
+</html>

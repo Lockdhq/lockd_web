@@ -1,0 +1,110 @@
+---
+/**
+ * Two locked strings from copy-locks.md must appear verbatim:
+ *   1. "Connect the app you already use"
+ *   2. "We'll verify from workouts you already track"
+ * Do not paraphrase either. Provider list from fitness-oracle.md §7.
+ */
+import { providers } from '../data/site';
+---
+
+<section id="verification" class="section verify">
+  <div class="container">
+    <div class="verify-grid">
+      <header class="verify-head" data-reveal>
+        <p class="eyebrow">Verification</p>
+        <h2 class="t-display">Connect the app you already use</h2>
+        <p class="t-subhead section-lede">
+          We'll verify from workouts you already track. There's nothing to log in Lockd, no
+          timer to remember to start, and no photo to upload as proof.
+        </p>
+
+        <p class="verify-note t-caption">
+          Read-only. Lockd reads completed workouts to settle your Lock — it never writes
+          anything back to your tracker.
+        </p>
+      </header>
+
+      <ul class="verify-list" role="list" data-reveal>
+        {
+          providers.map((p) => (
+            <li class="verify-item">
+              <span class="verify-dot" aria-hidden="true" />
+              <div>
+                <p class="verify-name">{p.name}</p>
+                <p class="verify-desc t-caption">{p.note}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .verify-grid {
+    display: grid;
+    gap: var(--space-7);
+  }
+
+  .verify-note {
+    margin-top: var(--space-5);
+    padding: var(--space-4);
+    border-radius: var(--radius-md);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    max-width: 48ch;
+  }
+
+  .verify-list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: var(--space-3);
+    align-content: center;
+  }
+
+  .verify-item {
+    display: flex;
+    gap: var(--space-4);
+    align-items: flex-start;
+    padding: var(--space-5);
+    border-radius: var(--radius-card);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    transition: border-color var(--dur-fast) var(--ease-standard);
+  }
+
+  .verify-item:hover {
+    border-color: var(--border-strong);
+  }
+
+  .verify-dot {
+    width: 10px;
+    height: 10px;
+    margin-top: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex: none;
+  }
+
+  .verify-name {
+    font-size: 1.0625rem;
+    font-weight: 600;
+  }
+
+  .verify-desc {
+    margin-top: 3px;
+    color: var(--text-dim);
+  }
+
+  @media (min-width: 900px) {
+    .verify-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-8);
+      align-items: start;
+    }
+  }
+</style>

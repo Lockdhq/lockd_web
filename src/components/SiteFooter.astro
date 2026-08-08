@@ -1,0 +1,88 @@
+---
+import Wordmark from './Wordmark.astro';
+import { site } from '../data/site';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <Wordmark />
+      <p class="t-caption footer-tagline">Put money on it. Do the work. Get it back.</p>
+    </div>
+
+    <nav aria-label="Footer" class="footer-nav">
+      <a href="#how-it-works">How it works</a>
+      <a href="#verification">Verification</a>
+      <a href="#faq">Questions</a>
+      <a href={`mailto:${site.contactEmail}`}>Contact</a>
+      {/*
+        OPEN QUESTION (BRIEF.md §9): are legal pages needed at launch?
+        ASSUMPTION: no invented legal copy. Terms and Privacy links belong here
+        the moment real copy exists — writing placeholder legal text would be a
+        fabricated claim about how data is handled. The waitlist form carries a
+        factual, specific line about what the email is used for instead.
+
+        <a href="/terms">Terms</a>
+        <a href="/privacy">Privacy</a>
+      */}
+    </nav>
+  </div>
+
+  <div class="container footer-base">
+    <p class="t-legal">© {year} Lockd. Stakes are held in escrow, never invested.</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid var(--border);
+    padding-block: var(--space-8) var(--space-6);
+    margin-top: var(--space-10);
+  }
+
+  .footer-inner {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  .footer-tagline {
+    color: var(--text-dim);
+    margin-top: var(--space-2);
+    max-width: 26ch;
+  }
+
+  .footer-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3) var(--space-5);
+  }
+
+  .footer-nav a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.9375rem;
+    transition: color var(--dur-fast) var(--ease-standard);
+  }
+
+  .footer-nav a:hover {
+    color: var(--text);
+  }
+
+  .footer-base {
+    margin-top: var(--space-7);
+    padding-top: var(--space-5);
+    border-top: 1px solid var(--border);
+    color: var(--text-dim);
+  }
+
+  @media (min-width: 800px) {
+    .footer-inner {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+  }
+</style>
