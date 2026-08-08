@@ -12,7 +12,7 @@
 const faqs = [
   {
     q: 'Who am I staking against?',
-    a: "Nobody. A Lock has no other side — you aren't matched with another person, and there's no pool your stake goes into. It's a commitment you make to yourself, with a consequence attached that you chose.",
+    a: "Nobody. A Lock has no other side. You are not matched against anyone, and the outcome turns on one question only: whether the workouts land inside your window. Crack it and the stake comes back in full. Get locked out and it goes to the Spotter or charity you named before you signed.",
   },
   {
     q: 'Do I get the whole stake back if I crack it?',
@@ -38,10 +38,13 @@ const faqs = [
 ---
 
 <section id="faq" class="section faq">
-  <div class="container">
-    <header class="section-head" data-reveal>
+  <div class="container faq-layout">
+    <header class="section-head faq-head" data-reveal>
       <p class="eyebrow">Straight answers</p>
       <h2 class="t-display">questions worth asking</h2>
+      <p class="section-lede">
+        The things people ask before they put money on a week of training.
+      </p>
     </header>
 
     <div class="faq-list" data-reveal>
@@ -72,10 +75,38 @@ const faqs = [
 </section>
 
 <style>
+  /* Two columns from 900px, matching the verification and money sections.
+     Single column below that keeps the answers full-width on a phone. */
+  .faq-layout {
+    display: grid;
+    gap: var(--space-7);
+  }
+
+  /* The grid gap owns the spacing here, so the shared .section-head margin
+     would otherwise stack on top of it. */
+  .faq-head {
+    margin-bottom: 0;
+  }
+
   .faq-list {
-    margin-top: var(--space-7);
     border-top: 1px solid var(--border);
-    max-width: 74ch;
+  }
+
+  @media (min-width: 900px) {
+    .faq-layout {
+      grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+      gap: var(--space-8);
+      align-items: start;
+    }
+
+    .faq-head {
+      position: sticky;
+      top: calc(var(--header-h) + var(--space-6));
+    }
+
+    .faq-list {
+      margin-top: 0;
+    }
   }
 
   .faq-item {
