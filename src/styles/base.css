@@ -217,7 +217,7 @@ h4 {
 }
 
 .section {
-  padding-block: clamp(4rem, 2.5rem + 7vw, 7.5rem);
+  padding-block: clamp(3.5rem, 2.5rem + 4.4vw, 5.75rem);
 }
 
 .section-tight {
@@ -279,24 +279,33 @@ h4 {
     border-color var(--duration-fast) var(--ease-move);
 }
 
-.btn-primary {
+.btn-accent {
   background: var(--accent);
-  color: #000;
+  color: var(--accent-on);
 }
 
-.btn-primary:hover {
+.btn-accent:hover {
   background: var(--accent-soft);
 }
 
-.btn-secondary {
+.btn-ghost {
   background: transparent;
   color: var(--text);
   border: 1px solid var(--border-strong);
 }
 
-.btn-secondary:hover {
+.btn-ghost:hover {
   border-color: var(--text);
   background: var(--glass);
+}
+
+.btn-sm {
+  padding: 9px var(--space-lg);
+  font-size: 0.9375rem;
+}
+
+.btn-lg {
+  padding: 17px var(--space-xxl);
 }
 
 .btn:active {
@@ -363,4 +372,26 @@ h4 {
     opacity: 1 !important;
     transform: none !important;
   }
+}
+
+/* =========================================================================
+   Section headers — shared by every section, so they live here rather than
+   being re-declared in each scoped <style>.
+   ========================================================================= */
+
+.section-head {
+  margin-bottom: var(--space-8);
+}
+
+.section-head > h2,
+.section-head > h3 {
+  margin-top: var(--space-3);
+  max-width: 20ch;
+}
+
+/* Measure cap. Left to the container width, lede lines ran ~135 characters
+   at 1440px, well past a comfortable read. */
+.section-lede {
+  margin-top: var(--space-4);
+  max-width: 58ch;
 }

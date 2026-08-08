@@ -38,7 +38,10 @@ import { screens } from '../data/screens';
   .band {
     position: relative;
     isolation: isolate;
-    min-height: min(74vh, 560px);
+    /* Height is deliberately constrained: `cover` crops harder in a shorter box,
+       which is what keeps the source screen's own text and button out of frame.
+       See the object-position note below. */
+    min-height: clamp(19rem, 40vh, 30rem);
     display: grid;
     align-items: end;
     padding-block: var(--space-9) var(--space-8);
@@ -52,10 +55,13 @@ import { screens } from '../data/screens';
     width: 100%;
     height: 100%;
     object-fit: cover;
-    /* Art direction: the capture's status bar and Dynamic Island sit at the very
-       top of the source. Anchoring low keeps the runners in frame and keeps the
-       phone chrome out of a context where it would read as a fake browser UI. */
-    object-position: 50% 62%;
+    /* Art direction, measured not guessed: sampling intro.png row-by-row puts the
+       photograph safely inside 36%–76% of its height, the app's own headline at 14%–24% and
+       its "Get started" button at 78%–83%. Anchoring at the midpoint of the photo
+       window — and keeping the band short so `cover` crops hard — stops the
+       screen's own copy, or a button that isn't a real control, bleeding through
+       and colliding with the overlaid text. */
+    object-position: 50% 56%;
     z-index: -2;
   }
 

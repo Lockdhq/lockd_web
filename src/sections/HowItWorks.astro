@@ -42,7 +42,7 @@ const steps = [
         steps.map((step) => (
           <li class="how-step" data-reveal>
             <div class="how-copy">
-              <p class="how-n tnum" aria-hidden="true">
+              <p class="how-n" aria-hidden="true">
                 {step.n}
               </p>
               <h3 class="t-title how-title">{step.title}</h3>
@@ -52,8 +52,8 @@ const steps = [
             <figure class="how-figure">
               <DeviceFrame
                 screen={step.screen}
-                width={248}
-                sizes="(max-width: 860px) 58vw, 248px"
+                width={260}
+                sizes="(max-width: 860px) 58vw, 260px"
               />
               <figcaption class="t-caption how-cap">{step.caption}</figcaption>
             </figure>
@@ -82,7 +82,7 @@ const steps = [
   .how-n {
     font-size: 0.875rem;
     font-weight: 700;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.06em;
     color: var(--accent);
   }
 
@@ -93,7 +93,7 @@ const steps = [
   .how-body {
     margin-top: var(--space-4);
     color: var(--text-muted);
-    max-width: 46ch;
+    max-width: 42ch;
   }
 
   .how-figure {
@@ -110,22 +110,21 @@ const steps = [
   }
 
   @media (min-width: 860px) {
+    /* Three across rather than an alternating zig-zag. The zig-zag cost ~1300px
+       of scroll — each row was as tall as a 497px device frame wrapped around
+       157px of copy — and a side-by-side row communicates "sequence" better. */
     .how-list {
-      gap: var(--space-10);
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-6);
+      align-items: start;
     }
 
     .how-step {
-      grid-template-columns: 1fr auto;
-      gap: var(--space-8);
+      gap: var(--space-5);
     }
 
-    /* Alternate sides so the eye zig-zags down the list. */
-    .how-step:nth-child(even) .how-copy {
-      order: 2;
-    }
-
-    .how-step:nth-child(even) .how-figure {
-      order: 1;
+    .how-body {
+      min-height: 5.25em;
     }
   }
 </style>

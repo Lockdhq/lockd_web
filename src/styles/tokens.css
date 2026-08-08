@@ -32,6 +32,14 @@
   --on-light: #fffafa;
   --control-light: #d9d9d9;
 
+  /* Text colour on an accent fill. Taken from the screenshots: the lime
+     "+ Create a Lock" button in home.png carries black text, not dark grey. */
+  --accent-on: #000000;
+
+  /* Neutral control fill — slider tracks, unselected chips. Aliases an existing
+     BRIEF §5 surface rather than introducing a new grey. */
+  --control: var(--surface-strong);
+
   --danger: #ff5757; /* Locked Out */
   --warning: #ffb020; /* deadline pressure */
   --bronze: #c8a590;
@@ -51,6 +59,22 @@
   --space-xxl: 48px;
   --space-xxxl: 64px;
 
+  /* Numeric aliases, used throughout the page components. 1–8 resolve to the
+     app scale above and add nothing. 12px, 96px and 128px have no app
+     equivalent because BRIEF §5 is a phone scale: a desktop marketing page
+     needs a coarser section rhythm than a 390px screen does. These three are
+     layout values only — no brand token is being invented here. */
+  --space-1: var(--space-xs); /*   4 */
+  --space-2: var(--space-sm); /*   8 */
+  --space-3: 12px; /*  12 — web only */
+  --space-4: var(--space-md); /*  16 */
+  --space-5: var(--space-lg); /*  24 */
+  --space-6: var(--space-xl); /*  32 */
+  --space-7: var(--space-xxl); /*  48 */
+  --space-8: var(--space-xxxl); /*  64 */
+  --space-9: 96px; /*  96 — web only */
+  --space-10: 128px; /* 128 — web only */
+
   /* ---- Radius ------------------------------------------------------------ */
   --radius-pill: 999px;
   --radius-card: 20px;
@@ -58,6 +82,8 @@
   --radius-input: 16px;
   --radius-panel: 36px;
   --radius-hero: 28px;
+  --radius-md: var(--radius-input);
+  --radius-sm: 10px; /* web only — small chips and focus rings */
 
   /* ---- Motion ------------------------------------------------------------ */
   --duration-instant: 80ms;

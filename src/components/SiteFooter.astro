@@ -9,7 +9,11 @@ const year = new Date().getFullYear();
   <div class="container footer-inner">
     <div class="footer-brand">
       <Wordmark />
-      <p class="t-caption footer-tagline">Put money on it. Do the work. Get it back.</p>
+      <p class="t-caption footer-tagline">
+        {/* Non-breaking spaces inside each sentence so the line can only ever
+            break between the three beats, never mid-clause, at any width. */}
+        Put&nbsp;money&nbsp;on&nbsp;it. Do&nbsp;the&nbsp;work. Get&nbsp;it&nbsp;back.
+      </p>
     </div>
 
     <nav aria-label="Footer" class="footer-nav">
@@ -39,7 +43,8 @@ const year = new Date().getFullYear();
   .site-footer {
     border-top: 1px solid var(--border);
     padding-block: var(--space-8) var(--space-6);
-    margin-top: var(--space-10);
+    /* No margin-top: the last section already contributes its own padding-block,
+       and stacking --space-10 on top of it opened a ~185px void above the rule. */
   }
 
   .footer-inner {
@@ -51,7 +56,7 @@ const year = new Date().getFullYear();
   .footer-tagline {
     color: var(--text-dim);
     margin-top: var(--space-2);
-    max-width: 26ch;
+    max-width: 30ch;
   }
 
   .footer-nav {
@@ -64,7 +69,7 @@ const year = new Date().getFullYear();
     color: var(--text-muted);
     text-decoration: none;
     font-size: 0.9375rem;
-    transition: color var(--dur-fast) var(--ease-standard);
+    transition: color var(--duration-fast) var(--ease-move);
   }
 
   .footer-nav a:hover {

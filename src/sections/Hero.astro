@@ -15,9 +15,11 @@ import { stake } from '../data/site';
       </h1>
 
       <p class="t-subhead hero-sub">
-        Stake from ${stake.min} on a goal you set yourself. Do the work and you
-        <strong>crack</strong> the Lock — your stake comes straight back. Come up short and
-        you're <strong>locked out</strong>, and it goes where you chose up front.
+        Stake from ${stake.min} on a goal you set yourself. Do the work and you <strong
+          >crack</strong
+        > the Lock — your stake comes straight back. Come up short and you're <strong
+          >locked out</strong
+        >, and it goes where you chose up front.
       </p>
 
       <div class="hero-actions">
@@ -100,6 +102,13 @@ import { stake } from '../data/site';
     margin-top: var(--space-6);
   }
 
+  /* Stacked buttons sized to their own labels looked ragged, so match them. */
+  @media (max-width: 560px) {
+    .hero-actions .btn {
+      flex: 1 1 100%;
+    }
+  }
+
   .hero-facts {
     display: flex;
     flex-wrap: wrap;
@@ -136,12 +145,11 @@ import { stake } from '../data/site';
     }
 
     .hero-inner {
-      grid-template-columns: 1.05fr 0.95fr;
-      gap: var(--space-9);
-    }
-
-    .hero-visual {
-      justify-content: flex-end;
+      /* `auto` on the visual column so it is exactly the device width — a
+         fractional column left ~130px of dead space beside the phone and
+         squeezed the headline onto three lines. */
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: var(--space-8);
     }
   }
 </style>

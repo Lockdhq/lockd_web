@@ -40,7 +40,7 @@ const rules = [
       {
         rules.map((rule, i) => (
           <li class="fair-item" data-reveal>
-            <p class="fair-n tnum" aria-hidden="true">
+            <p class="fair-n" aria-hidden="true">
               {String(i + 1).padStart(2, '0')}
             </p>
             <h3 class="fair-title">{rule.title}</h3>
@@ -73,7 +73,7 @@ const rules = [
   .fair-n {
     font-size: 0.8125rem;
     font-weight: 700;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.06em;
     color: var(--accent);
   }
 

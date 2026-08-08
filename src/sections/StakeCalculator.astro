@@ -190,7 +190,9 @@ import { stake } from '../data/site';
     display: grid;
     gap: var(--space-7);
     margin-top: var(--space-7);
-    align-items: center;
+    /* start, not center: the phone is taller than the tool card, and centring
+       floated its top edge ~50px above the card for no reason. */
+    align-items: start;
   }
 
   .stake-tool {
@@ -275,7 +277,7 @@ import { stake } from '../data/site';
     background: var(--accent);
     border: 3px solid var(--bg);
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
-    transition: transform var(--dur-fast) var(--ease-standard);
+    transition: transform var(--duration-fast) var(--ease-move);
   }
 
   input[type='range']::-moz-range-thumb {
@@ -304,15 +306,18 @@ import { stake } from '../data/site';
   }
 
   /* ---- Presets ---- */
+  /* Grid, not flex-wrap: at 390px the four chips wrapped 3 + 1 and left "$25"
+     orphaned on its own row. */
   .stake-presets {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: var(--space-2);
     margin-top: var(--space-5);
   }
 
   .chip {
-    padding: 9px 18px;
+    padding: 9px 14px;
+    text-align: center;
     border-radius: 99px;
     border: 1px solid var(--border-strong);
     background: var(--control);
@@ -323,9 +328,9 @@ import { stake } from '../data/site';
     font-variant-numeric: tabular-nums;
     cursor: pointer;
     transition:
-      background var(--dur-fast) var(--ease-standard),
-      color var(--dur-fast) var(--ease-standard),
-      border-color var(--dur-fast) var(--ease-standard);
+      background var(--duration-fast) var(--ease-move),
+      color var(--duration-fast) var(--ease-move),
+      border-color var(--duration-fast) var(--ease-move);
   }
 
   .chip:hover {
@@ -340,11 +345,21 @@ import { stake } from '../data/site';
   }
 
   /* ---- Outcome panels ---- */
+  /* Both endings must stay on screen together — that is the whole point of the
+     panel — but side by side at 390px crushed "If you're locked out" onto three
+     lines. Stacking keeps both visible without scrolling and keeps each label on
+     one line; they go side by side as soon as there is room. */
   .stake-outcomes {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     gap: var(--space-3);
     margin-top: var(--space-6);
+  }
+
+  @media (min-width: 440px) {
+    .stake-outcomes {
+      grid-template-columns: 1fr 1fr;
+    }
   }
 
   .stake-outcome {
@@ -366,6 +381,7 @@ import { stake } from '../data/site';
   .stake-outcome-head {
     display: flex;
     align-items: center;
+    text-wrap: nowrap;
     gap: var(--space-2);
     font-size: 0.875rem;
     font-weight: 600;
