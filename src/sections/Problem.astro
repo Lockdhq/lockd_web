@@ -24,7 +24,11 @@
     padding-block: var(--space-9);
   }
 
-  .problem-inner {
+  /* Constrain the children, not the wrapper: .problem-inner shares its element
+     with .container, so setting max-width/margin here either centres the block
+     away from the page's left edge or pushes it flush to the viewport. */
+  .problem-line,
+  .problem-sub {
     max-width: 62ch;
   }
 

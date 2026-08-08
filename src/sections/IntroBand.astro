@@ -41,7 +41,7 @@ import { screens } from '../data/screens';
     /* Height is deliberately constrained: `cover` crops harder in a shorter box,
        which is what keeps the source screen's own text and button out of frame.
        See the object-position note below. */
-    min-height: clamp(19rem, 40vh, 30rem);
+    min-height: clamp(20rem, 48vh, 33rem);
     display: grid;
     align-items: end;
     padding-block: var(--space-9) var(--space-8);
@@ -55,13 +55,14 @@ import { screens } from '../data/screens';
     width: 100%;
     height: 100%;
     object-fit: cover;
-    /* Art direction, measured not guessed: sampling intro.png row-by-row puts the
-       photograph safely inside 36%–76% of its height, the app's own headline at 14%–24% and
-       its "Get started" button at 78%–83%. Anchoring at the midpoint of the photo
-       window — and keeping the band short so `cover` crops hard — stops the
-       screen's own copy, or a button that isn't a real control, bleeding through
-       and colliding with the overlaid text. */
-    object-position: 50% 56%;
+    /* Art direction, measured not guessed. Extracting the photo region and
+       viewing it puts the runners' heads and torsos at roughly 38%–54% of the
+       full image; the app's own subcopy runs to ~31% and its "Get started"
+       button sits at 78%–83%. The band is short, so `cover` shows only a thin
+       horizontal slice — anchoring at 56% landed on legs and hands, which read
+       as an unidentifiable crop. 44% centres the slice on the runners while
+       still clearing the screen's own copy above and its button below. */
+    object-position: 50% 44%;
     z-index: -2;
   }
 

@@ -19,9 +19,14 @@ import { providers } from '../data/site';
           timer to remember to start, and no photo to upload as proof.
         </p>
 
+        {/* Was "Read-only ... never writes anything back to your tracker".
+            Dropped: prd.md §12 contemplates a post-MVP light session *writer*
+            into HealthKit/Health Connect, so "never" is an absolute the docs
+            do not support. This states the documented behaviour instead:
+            trust-model.md §11 — "Automated check uses connected apps." */}
         <p class="verify-note t-caption">
-          Read-only. Lockd reads completed workouts to settle your Lock — it never writes
-          anything back to your tracker.
+          Lockd reads the workouts your apps have already recorded and uses them to settle
+          your Lock. You keep training exactly the way you do now.
         </p>
       </header>
 
