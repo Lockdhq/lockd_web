@@ -1,0 +1,39 @@
+---
+/**
+ * Wordmark.
+ *
+ * Renders the same vector mark as the mobile app (src/brand/logo.ts, sourced
+ * from lockd_mobile/src/brand/logo.ts) instead of styled text, so the web and
+ * app logos are the same artwork rather than a lookalike.
+ *
+ * The mobile app cycles brand colours (orange/blue/mint) in its logo. That is
+ * deliberately NOT reproduced here: AGENTS.md non-negotiable #5 is one accent on
+ * near-black, and on a page this size a second hue would cost more than it adds.
+ */
+import LogoMark from './LogoMark.astro';
+
+interface Props {
+  href?: string;
+  class?: string;
+}
+
+const { href, class: className = '' } = Astro.props;
+const Tag = href ? 'a' : 'span';
+---
+
+<Tag
+  class:list={['wordmark', className]}
+  {...href ? { href } : {}}
+  {...href ? { 'aria-label': 'Lockd — home' } : {}}
+>
+  <LogoMark variant="wordmark" height={22} />
+</Tag>
+
+<style>
+  .wordmark {
+    display: inline-flex;
+    align-items: center;
+    line-height: 1;
+    text-decoration: none;
+  }
+</style>

@@ -1,0 +1,222 @@
+---
+/**
+ * THE most important section on the page.
+ *
+ * "Cracked" = SUCCESS. "Locked out" = FAILURE. This is counterintuitive enough
+ * that the mobile app ships a dedicated screen for it, so the landing page
+ * teaches it explicitly, up front, before either word is used at volume.
+ *
+ * Both outcomes are shown at once — never behind a toggle. Hiding half the
+ * lesson to make it "interactive" is exactly how the meaning gets inverted.
+ * Each outcome carries an icon, the word, and a signed amount, so it never
+ * relies on colour alone (accessibility-guidelines.md §3).
+ */
+const outcomes = [
+  {
+    key: 'cracked',
+    label: 'Cracked',
+    verdict: 'You did it',
+    amount: '+$10',
+    amountLabel: 'Back in your vault',
+    body: 'You hit the goal inside the window. The Lock opens and your stake returns to your vault in full — the figure you staked, not a reduced one.',
+    aside: 'Yes — cracked is the good one.',
+  },
+  {
+    key: 'locked-out',
+    label: 'Locked out',
+    verdict: 'You came up short',
+    amount: '−$10',
+    amountLabel: 'Goes to your forfeit',
+    body: 'The window closed before you got there. Your stake goes to the Spotter or charity you picked when you set the Lock — a destination you named yourself, before you signed.',
+    aside: 'And locked out is the one to avoid.',
+  },
+] as const;
+---
+
+<section id="outcomes" class="section outcomes">
+  <div class="container">
+    <header class="section-head" data-reveal>
+      <p class="eyebrow">Two ways it ends</p>
+      <h2 class="t-display">there are only two outcomes</h2>
+      <p class="t-subhead section-lede">
+        Lockd uses two words for them, and one of them catches people out. Worth 20 seconds
+        now so the rest of this page reads the way it should.
+      </p>
+    </header>
+
+    <div class="outcome-grid">
+      {
+        outcomes.map((o) => (
+          <article class:list={['outcome', `outcome-${o.key}`]} data-reveal>
+            <div class="outcome-top">
+              <span class="outcome-icon" aria-hidden="true">
+                {o.key === 'cracked' ? (
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none">
+                    <path
+                      d="m4.5 12.5 5 5 10-11"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                ) : (
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none">
+                    <path
+                      d="M6 6l12 12M18 6L6 18"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                )}
+              </span>
+              <h3 class="outcome-label">{o.label}</h3>
+              <p class="outcome-verdict t-caption">{o.verdict}</p>
+            </div>
+
+            <p class="outcome-amount tnum">{o.amount}</p>
+            <p class="outcome-amount-label t-caption">{o.amountLabel}</p>
+
+            <p class="outcome-body">{o.body}</p>
+            <p class="outcome-aside t-caption">{o.aside}</p>
+          </article>
+        ))
+      }
+    </div>
+
+    <p class="outcomes-note t-caption" data-reveal>
+      There is no third outcome. Nothing rolls over, nothing compounds, and there is
+      nobody on the other side of it.
+    </p>
+  </div>
+</section>
+
+<style>
+  .outcome-grid {
+    display: grid;
+    gap: var(--space-4);
+    margin-top: var(--space-7);
+  }
+
+  .outcome {
+    position: relative;
+    padding: var(--space-6);
+    border-radius: var(--radius-card);
+    border: 1px solid var(--border);
+    background: var(--surface);
+    overflow: hidden;
+  }
+
+  .outcome::after {
+    content: '';
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: 0;
+    width: 3px;
+  }
+
+  .outcome-cracked::after {
+    background: var(--accent);
+  }
+
+  .outcome-locked-out::after {
+    background: var(--danger);
+  }
+
+  .outcome-top {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: var(--space-1) var(--space-3);
+  }
+
+  .outcome-icon {
+    grid-row: span 2;
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+  }
+
+  .outcome-cracked .outcome-icon {
+    background: var(--accent-dim);
+    color: var(--accent);
+  }
+
+  .outcome-locked-out .outcome-icon {
+    background: var(--danger-tint);
+    color: var(--danger-soft);
+  }
+
+  .outcome-label {
+    font-size: 1.375rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    align-self: end;
+  }
+
+  .outcome-cracked .outcome-label {
+    color: var(--accent);
+  }
+
+  .outcome-locked-out .outcome-label {
+    color: var(--danger-soft);
+  }
+
+  .outcome-verdict {
+    color: var(--text-dim);
+    align-self: start;
+  }
+
+  .outcome-amount {
+    margin-top: var(--space-5);
+    font-size: clamp(2.5rem, 7vw, 3.25rem);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 1;
+  }
+
+  .outcome-cracked .outcome-amount {
+    color: var(--accent);
+  }
+
+  .outcome-locked-out .outcome-amount {
+    color: var(--danger);
+  }
+
+  .outcome-amount-label {
+    margin-top: var(--space-2);
+    color: var(--text-muted);
+  }
+
+  .outcome-body {
+    margin-top: var(--space-5);
+    color: var(--text-muted);
+    max-width: 44ch;
+  }
+
+  .outcome-aside {
+    margin-top: var(--space-4);
+    padding-top: var(--space-4);
+    border-top: 1px dashed var(--border-strong);
+    color: var(--text-dim);
+    font-style: italic;
+  }
+
+  .outcomes-note {
+    margin-top: var(--space-6);
+    color: var(--text-dim);
+    text-align: center;
+    max-width: 62ch;
+    margin-inline: auto;
+  }
+
+  @media (min-width: 760px) {
+    .outcome-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-5);
+    }
+  }
+</style>

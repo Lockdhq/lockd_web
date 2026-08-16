@@ -22,3 +22,10 @@ Thumbs.db
 
 coverage/
 *.tsbuildinfo
+
+# build output
+dist/
+.astro/
+
+# waitlist signups (local JSONL store, see src/lib/waitlist.ts)
+/data/

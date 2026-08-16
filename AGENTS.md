@@ -25,8 +25,16 @@ repo and `lockd_docs` disagree, `lockd_docs` wins. Link to it; never copy it.
 
 ## Design tokens
 
-Mirror `lockd_mobile/src/theme.ts` exactly — full table in `BRIEF.md` §5. If the
-app's tokens change, this repo follows.
+**[`BRIEF.md`](./BRIEF.md) §5 is the authoritative token source for this repo.**
+
+⚠️ Do **not** use `lockd_mobile/src/theme.ts` as a token source. The copy reachable on
+`main` is **pre-redesign** and still says `#C5FF3D`; the redesign that produced
+`#DBFD00` and the screenshots in `public/screens/` is uncommitted elsewhere. Reading it
+will silently give you the wrong accent and eight other stale values. Measured proof:
+`#DBFD00` is the dominant accent in both `home.png` (193,709 px) and `lock-stake.png`
+(190,762 px), exactly matching BRIEF §5.
+
+If the mobile tokens change, update `BRIEF.md` §5 and this repo follows that.
 
 Voice: headlines are **lowercase** with tight negative tracking ("your locks",
 "lock it in"). Sentence-case body. Direct, physical, unhyped.

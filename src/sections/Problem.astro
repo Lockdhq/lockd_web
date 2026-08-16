@@ -1,0 +1,49 @@
+---
+/**
+ * Deliberately one tight beat, not a wall of motivational copy.
+ * copy-guidelines.md: direct, physical, unhyped. Never shame the user.
+ */
+---
+
+<section class="section problem" aria-labelledby="problem-heading">
+  <div class="container problem-inner">
+    <p class="eyebrow" data-reveal>The gap</p>
+    <h2 id="problem-heading" class="t-display problem-line" data-reveal>
+      you already know what to do.<br />
+      <span class="muted">quitting just doesn't cost you anything.</span>
+    </h2>
+    <p class="t-subhead problem-sub" data-reveal>
+      Skipping a session is free, so it happens. Lockd puts a small, real price on it —
+      one you set yourself, and one you get back the moment you follow through.
+    </p>
+  </div>
+</section>
+
+<style>
+  .problem {
+    padding-block: var(--space-9);
+  }
+
+  /* Constrain the children, not the wrapper: .problem-inner shares its element
+     with .container, so setting max-width/margin here either centres the block
+     away from the page's left edge or pushes it flush to the viewport. */
+  .problem-line,
+  .problem-sub {
+    max-width: 62ch;
+  }
+
+  .problem-line {
+    margin-top: var(--space-4);
+    text-wrap: balance;
+  }
+
+  .muted {
+    color: var(--text-dim);
+  }
+
+  .problem-sub {
+    margin-top: var(--space-6);
+    color: var(--text-muted);
+    max-width: 52ch;
+  }
+</style>

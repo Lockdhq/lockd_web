@@ -1,0 +1,167 @@
+---
+/**
+ * Every answer here traces to a source document or to on-screen copy in the five
+ * captures. Nothing is invented — in particular there is no pricing/fee claim,
+ * because no source document states one.
+ *
+ * Note the deliberate wording of the first answer: it neutralises the "is this
+ * gambling?" objection WITHOUT importing casino vocabulary (copy-guidelines §13
+ * bans odds / house edge / pot / buy-in). Saying "there's no house" would smuggle
+ * the frame back in through the negation, so it says no other side instead.
+ */
+const faqs = [
+  {
+    q: 'Who am I staking against?',
+    a: "Nobody. A Lock has no other side. You are not matched against anyone, and the outcome turns on one question only: whether the workouts land inside your window. Crack it and the stake comes back in full. Get locked out and it goes to the Spotter or charity you named before you signed.",
+  },
+  {
+    q: 'Do I get the whole stake back if I crack it?',
+    a: 'Yes. The amount you staked is the amount that returns to your vault — the full figure, not a reduced one.',
+  },
+  {
+    q: 'Do I have to log my workouts in Lockd?',
+    a: "No, and there's nothing in Lockd to log them in. You connect Strava, Apple Health or Health Connect once, then keep training exactly as you already do.",
+  },
+  {
+    q: "What if my watch dies or an app doesn't sync?",
+    a: "Then the Lock doesn't settle against you. A failure on the data side is never treated as you missing the work — it goes to your Spotter, and if nobody answers within 48 hours the Lock cracks.",
+  },
+  {
+    q: 'Can I change the goal after I sign?',
+    a: 'No. Once you sign, the stake moves and the terms are fixed. That is the entire point — a goal you can quietly soften on Thursday is the one you were already going to miss.',
+  },
+  {
+    q: 'Is this a crypto app?',
+    a: 'It uses USDC on Stellar underneath, which is why a $2 stake is even practical. You never deal with any of that: you open your vault with Face ID or a fingerprint, and there is nothing to write down, install or back up.',
+  },
+] as const;
+---
+
+<section id="faq" class="section faq">
+  <div class="container faq-layout">
+    <header class="section-head faq-head" data-reveal>
+      <p class="eyebrow">Straight answers</p>
+      <h2 class="t-display">questions worth asking</h2>
+      <p class="section-lede">
+        The things people ask before they put money on a week of training.
+      </p>
+    </header>
+
+    <div class="faq-list" data-reveal>
+      {
+        faqs.map((item) => (
+          <details class="faq-item" name="faq">
+            <summary class="faq-q">
+              <span>{item.q}</span>
+              <span class="faq-mark" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none">
+                  <path
+                    d="M12 5v14M5 12h14"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                  />
+                </svg>
+              </span>
+            </summary>
+            <div class="faq-a">
+              <p>{item.a}</p>
+            </div>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Two columns from 900px, matching the verification and money sections.
+     Single column below that keeps the answers full-width on a phone. */
+  .faq-layout {
+    display: grid;
+    gap: var(--space-7);
+  }
+
+  /* The grid gap owns the spacing here, so the shared .section-head margin
+     would otherwise stack on top of it. */
+  .faq-head {
+    margin-bottom: 0;
+  }
+
+  .faq-list {
+    border-top: 1px solid var(--border);
+  }
+
+  @media (min-width: 900px) {
+    .faq-layout {
+      grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+      gap: var(--space-8);
+      align-items: start;
+    }
+
+    .faq-head {
+      position: sticky;
+      top: calc(var(--header-h) + var(--space-6));
+    }
+
+    .faq-list {
+      margin-top: 0;
+    }
+  }
+
+  .faq-item {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .faq-q {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding-block: var(--space-5);
+    font-size: 1.0625rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    cursor: pointer;
+    list-style: none;
+    transition: color var(--duration-fast) var(--ease-move);
+  }
+
+  .faq-q::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-q:hover {
+    color: var(--accent);
+  }
+
+  .faq-q:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: var(--radius-sm);
+  }
+
+  .faq-mark {
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    flex: none;
+    border-radius: 50%;
+    border: 1px solid var(--border-strong);
+    color: var(--text-muted);
+    transition: transform var(--duration-normal) var(--ease-move);
+  }
+
+  .faq-item[open] .faq-mark {
+    transform: rotate(45deg);
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .faq-a {
+    padding-bottom: var(--space-5);
+    color: var(--text-muted);
+    max-width: 62ch;
+  }
+</style>

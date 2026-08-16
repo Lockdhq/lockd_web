@@ -1,0 +1,95 @@
+---
+/**
+ * Full-bleed emotional band using intro.png.
+ *
+ * The capture's own subcopy mentions "community" — Lockd explicitly refuses to
+ * be an activity social network (vision.md §13), so this uses the photograph as
+ * imagery only and never quotes that line. The overlaid words are the app's own
+ * "Go beyond, be more."
+ */
+import { Image } from 'astro:assets';
+import { screens } from '../data/screens';
+---
+
+<section class="band" aria-labelledby="band-heading">
+  <Image
+    src={screens.intro.src}
+    alt={screens.intro.alt}
+    widths={[640, 1024, 1600, 2000]}
+    sizes="100vw"
+    format="avif"
+    loading="lazy"
+    decoding="async"
+    class="band-img"
+  />
+
+  <div class="band-overlay"></div>
+
+  <div class="container band-content">
+    <h2 id="band-heading" class="t-display band-title">go beyond, be more.</h2>
+    <p class="t-subhead band-sub">
+      Lockd's own opening screen. The work is still yours to do — Lockd only makes sure
+      it's worth doing.
+    </p>
+  </div>
+</section>
+
+<style>
+  .band {
+    position: relative;
+    isolation: isolate;
+    /* Height is deliberately constrained: `cover` crops harder in a shorter box,
+       which is what keeps the source screen's own text and button out of frame.
+       See the object-position note below. */
+    min-height: clamp(20rem, 48vh, 33rem);
+    display: grid;
+    align-items: end;
+    padding-block: var(--space-9) var(--space-8);
+    margin-block: var(--space-8);
+    overflow: hidden;
+  }
+
+  .band-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Art direction, measured not guessed. Extracting the photo region and
+       viewing it puts the runners' heads and torsos at roughly 38%–54% of the
+       full image; the app's own subcopy runs to ~31% and its "Get started"
+       button sits at 78%–83%. The band is short, so `cover` shows only a thin
+       horizontal slice — anchoring at 56% landed on legs and hands, which read
+       as an unidentifiable crop. 44% centres the slice on the runners while
+       still clearing the screen's own copy above and its button below. */
+    object-position: 50% 44%;
+    z-index: -2;
+  }
+
+  .band-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.92) 0%,
+      rgba(0, 0, 0, 0.65) 38%,
+      rgba(0, 0, 0, 0.25) 70%,
+      rgba(0, 0, 0, 0.55) 100%
+    );
+  }
+
+  .band-content {
+    position: relative;
+  }
+
+  .band-title {
+    text-wrap: balance;
+  }
+
+  .band-sub {
+    margin-top: var(--space-4);
+    max-width: 44ch;
+    color: rgba(255, 255, 255, 0.82);
+  }
+</style>

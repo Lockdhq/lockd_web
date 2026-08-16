@@ -76,7 +76,14 @@ it would invert the meaning of the whole page. The mobile app ships a dedicated
 
 ## 5. Brand tokens
 
-Lifted verbatim from `lockd_mobile/src/theme.ts`. The app and the site must match.
+**This section is the authoritative token source for `lockd_web`.**
+
+⚠️ Do **not** read `lockd_mobile/src/theme.ts`. The copy on `main` is **pre-redesign**
+and still says `#C5FF3D`; the redesign that produced `#DBFD00` and the screenshots in
+`public/screens/` is uncommitted in another worktree. Measured proof: `#DBFD00` is the
+dominant accent in both `home.png` (193,709 px) and `lock-stake.png` (190,762 px),
+matching the table below exactly. When the mobile tokens land, update this section and
+the site follows it.
 
 ### Colour
 

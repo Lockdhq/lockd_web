@@ -1,0 +1,98 @@
+---
+/**
+ * A neutral device bezel.
+ *
+ * Deliberately generic: rounded corners, a thin rim, no notch cutout, no logo,
+ * no branded hardware silhouette. BRIEF §6 allows framing but forbids faking a
+ * different device — the captures keep their real status bar and Dynamic Island,
+ * and this frame doesn't claim to be any particular phone.
+ */
+import { Image } from 'astro:assets';
+import type { Screen } from '../data/screens';
+
+interface Props {
+  screen: Screen;
+  /** Rendered width of the device in CSS px at the largest breakpoint. */
+  width?: number;
+  /** Set on the LCP image only. */
+  priority?: boolean;
+  sizes?: string;
+  class?: string;
+  glow?: boolean;
+}
+
+const {
+  screen,
+  width = 300,
+  priority = false,
+  sizes = '(max-width: 640px) 74vw, 300px',
+  class: className = '',
+  glow = false,
+} = Astro.props;
+
+// Source captures are 1206×2622. Render at 2× the CSS width for crisp output on
+// retina, and let astro:assets emit the responsive set below that.
+const renderWidth = Math.round(width * 2);
+---
+
+<div
+  class:list={['device', className, { 'device-glow': glow }]}
+  style={`--device-w:${width}px`}
+>
+  <div class="device-screen">
+    <Image
+      src={screen.src}
+      alt={screen.alt}
+      width={renderWidth}
+      densities={[1, 2]}
+      sizes={sizes}
+      loading={priority ? 'eager' : 'lazy'}
+      decoding={priority ? 'sync' : 'async'}
+      fetchpriority={priority ? 'high' : 'auto'}
+      format="avif"
+    />
+  </div>
+</div>
+
+<style>
+  .device {
+    position: relative;
+    width: var(--device-w);
+    max-width: 100%;
+    flex: none;
+  }
+
+  .device-screen {
+    position: relative;
+    border-radius: clamp(24px, 9%, 44px);
+    overflow: hidden;
+    background: var(--bg);
+    /* The rim reads as a device edge without imitating a specific handset. */
+    border: 1px solid var(--border-strong);
+    box-shadow:
+      0 0 0 1px rgba(0, 0, 0, 0.9),
+      0 30px 60px -20px rgba(0, 0, 0, 0.9),
+      0 10px 24px -12px rgba(0, 0, 0, 0.8);
+  }
+
+  .device-screen :global(img) {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* A soft lime bloom behind the hero device. Same accent, no new hue. */
+  .device-glow::before {
+    content: '';
+    position: absolute;
+    inset: -14% -22%;
+    background: radial-gradient(
+      55% 45% at 50% 42%,
+      var(--accent-dim),
+      transparent 70%
+    );
+    filter: blur(48px);
+    z-index: -1;
+    pointer-events: none;
+  }
+</style>

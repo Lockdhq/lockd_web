@@ -1,0 +1,115 @@
+---
+import DeviceFrame from '../components/DeviceFrame.astro';
+import { screens } from '../data/screens';
+
+const facts = [
+  {
+    title: 'A vault you open with your face',
+    body: 'Your stake sits in a vault secured by the passkey already on your phone. Face ID or a fingerprint signs it. There is nothing to write down, install or back up.',
+  },
+  {
+    title: 'Held until the Lock settles',
+    body: 'A staked amount goes into escrow when you sign and stays there until the outcome is known. Nothing happens to it in between — it is waiting on one question, which is whether you did the work.',
+  },
+  {
+    title: 'You choose the forfeit up front',
+    body: "Before you sign, you name where the money goes if you're locked out — a Spotter you trust, or a charity. You can't be surprised by the answer later, because you wrote it.",
+  },
+  {
+    title: 'USDC, on Stellar',
+    body: 'Stakes are held in USDC and settle on Stellar, which is why $2 is a workable amount. That is a plumbing detail — you never touch it to use Lockd.',
+  },
+] as const;
+---
+
+<section id="money" class="section money">
+  <div class="container">
+    <div class="money-grid">
+      <div class="money-copy">
+        <header class="section-head" data-reveal>
+          <p class="eyebrow">Your money</p>
+          <h2 class="t-display">where the stake actually sits</h2>
+          <p class="t-subhead section-lede">
+            You're putting real money down, so here is exactly what happens to it.
+          </p>
+        </header>
+
+        <dl class="money-list" data-reveal>
+          {
+            facts.map((f) => (
+              <div class="money-item">
+                <dt class="money-title">{f.title}</dt>
+                <dd class="money-body">{f.body}</dd>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+
+      <figure class="money-figure" data-reveal>
+        <DeviceFrame
+          screen={screens.lockReview}
+          width={264}
+          sizes="(max-width: 900px) 62vw, 264px"
+        />
+        <figcaption class="t-caption money-cap">
+          The review step spells out the stake, the window and the forfeit before you sign.
+        </figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<style>
+  .money-grid {
+    display: grid;
+    gap: var(--space-8);
+    align-items: start;
+  }
+
+  .money-list {
+    margin-top: var(--space-7);
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  .money-item {
+    padding-inline-start: var(--space-5);
+    border-inline-start: 2px solid var(--border-strong);
+  }
+
+  .money-title {
+    font-size: 1.0625rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  .money-body {
+    margin: var(--space-2) 0 0;
+    color: var(--text-muted);
+    max-width: 52ch;
+  }
+
+  .money-figure {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+    position: sticky;
+    top: 92px;
+  }
+
+  .money-cap {
+    color: var(--text-dim);
+    text-align: center;
+    max-width: 34ch;
+  }
+
+  @media (min-width: 900px) {
+    .money-grid {
+      grid-template-columns: 1fr auto;
+      gap: var(--space-9);
+    }
+  }
+</style>

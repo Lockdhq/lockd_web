@@ -1,0 +1,130 @@
+---
+import DeviceFrame from '../components/DeviceFrame.astro';
+import { screens } from '../data/screens';
+
+const steps = [
+  {
+    n: '01',
+    title: 'set the shape',
+    body: "Pick a template or build your own: how many workouts, how long each one has to be, and the window you've got to do them in. The app fine-tunes from there.",
+    screen: screens.lockGoal,
+    caption: 'Step 1 of 5 — what are you committing to?',
+  },
+  {
+    n: '02',
+    title: 'set the stake',
+    body: 'Anywhere from $2 to $25. Both endings are shown side by side before you commit to either — the app never lets you set a stake without seeing what missing it costs.',
+    screen: screens.lockStake,
+    caption: 'Step 2 of 5 — how much is it worth?',
+  },
+  {
+    n: '03',
+    title: 'lock it in',
+    body: 'A last read of the terms, then you sign with Face ID. The stake moves and the terms are fixed — you cannot quietly soften the goal halfway through the week.',
+    screen: screens.lockReview,
+    caption: 'Step 5 of 5 — the review, before you sign.',
+  },
+] as const;
+---
+
+<section id="how-it-works" class="section how">
+  <div class="container">
+    <header class="section-head" data-reveal>
+      <p class="eyebrow">Setting a Lock</p>
+      <h2 class="t-display">three steps, then it's out of your hands</h2>
+      <p class="t-subhead section-lede">
+        Once it's signed, the only thing that changes the outcome is whether you do the work.
+      </p>
+    </header>
+
+    <ol class="how-list" role="list">
+      {
+        steps.map((step) => (
+          <li class="how-step" data-reveal>
+            <div class="how-copy">
+              <p class="how-n" aria-hidden="true">
+                {step.n}
+              </p>
+              <h3 class="t-title how-title">{step.title}</h3>
+              <p class="how-body">{step.body}</p>
+            </div>
+
+            <figure class="how-figure">
+              <DeviceFrame
+                screen={step.screen}
+                width={260}
+                sizes="(max-width: 860px) 58vw, 260px"
+              />
+              <figcaption class="t-caption how-cap">{step.caption}</figcaption>
+            </figure>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .how-list {
+    list-style: none;
+    padding: 0;
+    margin-top: var(--space-8);
+    display: grid;
+    gap: var(--space-9);
+  }
+
+  .how-step {
+    display: grid;
+    gap: var(--space-6);
+    align-items: center;
+  }
+
+  .how-n {
+    font-size: 0.875rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--accent);
+  }
+
+  .how-title {
+    margin-top: var(--space-3);
+  }
+
+  .how-body {
+    margin-top: var(--space-4);
+    color: var(--text-muted);
+    max-width: 42ch;
+  }
+
+  .how-figure {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .how-cap {
+    color: var(--text-dim);
+    text-align: center;
+  }
+
+  @media (min-width: 860px) {
+    /* Three across rather than an alternating zig-zag. The zig-zag cost ~1300px
+       of scroll — each row was as tall as a 497px device frame wrapped around
+       157px of copy — and a side-by-side row communicates "sequence" better. */
+    .how-list {
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-6);
+      align-items: start;
+    }
+
+    .how-step {
+      gap: var(--space-5);
+    }
+
+    .how-body {
+      min-height: 5.25em;
+    }
+  }
+</style>
