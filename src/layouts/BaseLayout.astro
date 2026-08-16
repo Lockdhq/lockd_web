@@ -11,6 +11,7 @@ interface Props {
 
 const { title = site.title, description = site.description } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url).href;
+const ogImage = new URL('/og-image.png', Astro.site ?? site.url).href;
 ---
 
 <!doctype html>
@@ -30,12 +31,18 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url).href;
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
 
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="apple-touch-icon" href="/favicon.svg" />
+    {/* iOS ignores SVG here — this must be a real PNG (see
+        scripts/generate-social-assets.mjs). */}
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   </head>
 
   <body>
@@ -50,6 +57,33 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url).href;
       // Reveal-on-scroll. Progressive enhancement: without JS, or with reduced
       // motion, [data-reveal] elements are already visible (see base.css).
       const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+      // CSS `scroll-behavior: smooth` on <html> cannot be trusted to actually
+      // move the page on fragment navigation — verified directly: clicking an
+      // in-page anchor, assigning location.hash, and loading a URL with a hash
+      // already in it all silently no-op with smooth scroll-behavior active,
+      // while the identical navigation works every time once scroll-behavior
+      // is 'auto'. scrollIntoView() with an explicit behavior option doesn't
+      // share that failure mode, so drive all in-page navigation through it
+      // instead of leaving it to the browser's native fragment scroll.
+      function jumpToHash(hash: string) {
+        const target = hash && document.getElementById(hash.slice(1));
+        if (!target) return false;
+        target.scrollIntoView({ behavior: reduced.matches ? 'auto' : 'smooth', block: 'start' });
+        return true;
+      }
+
+      document.addEventListener('click', (event) => {
+        const link = (event.target as Element).closest?.('a[href^="#"]');
+        const href = link?.getAttribute('href');
+        if (!href || href === '#') return;
+        if (jumpToHash(href)) {
+          event.preventDefault();
+          history.pushState(null, '', href);
+        }
+      });
+
+      if (location.hash) jumpToHash(location.hash);
 
       if (!reduced.matches) {
         const targets = document.querySelectorAll<HTMLElement>('[data-reveal]');

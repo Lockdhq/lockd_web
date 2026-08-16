@@ -19,6 +19,15 @@ html {
   scroll-behavior: smooth;
   /* Anchor targets clear the sticky header. */
   scroll-padding-top: calc(var(--header-h) + var(--space-lg));
+  /* Must live here, not on body: setting overflow-x alone forces the other
+     axis's computed overflow to `auto` (CSS Overflow §3), which would make
+     body its own independent scroll container, split from
+     document.scrollingElement. Every native scroll-to-anchor mechanism —
+     header nav links, scrollIntoView(), browser back/forward scroll
+     restore, :target — silently stops moving the page while wheel/trackpad
+     scroll keeps working, since wheel input hits body's separate scrollbox
+     directly. */
+  overflow-x: hidden;
 }
 
 body {
@@ -31,7 +40,6 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
-  overflow-x: hidden;
 }
 
 img,
