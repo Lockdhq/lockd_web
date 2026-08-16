@@ -3,10 +3,13 @@
  *
  * OPEN QUESTION (BRIEF.md §9): primary CTA is waitlist, TestFlight, or App Store?
  * ASSUMPTION: waitlist. No store or TestFlight URL exists in any source document,
- * and publishing one we don't have would be an invented claim. Set
- * PUBLIC_WAITLIST_ENDPOINT to a real form endpoint to enable submission; with it
- * unset the form degrades to an honest mailto: rather than faking a success state.
- * Swapping to a store link later is a one-line change here.
+ * and publishing one we don't have would be an invented claim. Swapping to a
+ * store link later is a one-line change here.
+ *
+ * The waitlist posts to this site's own `/api/waitlist` route (see
+ * src/pages/api/waitlist.ts) by default — no email required to sign up. Set
+ * PUBLIC_WAITLIST_ENDPOINT to point submissions at a different endpoint instead
+ * (e.g. once lockd_backend has a real waitlist table).
  */
 export const site = {
   name: 'Lockd',
@@ -17,7 +20,7 @@ export const site = {
   contactEmail: 'hello@lockd.app',
 } as const;
 
-export const waitlistEndpoint = import.meta.env.PUBLIC_WAITLIST_ENDPOINT ?? '';
+export const waitlistEndpoint = import.meta.env.PUBLIC_WAITLIST_ENDPOINT ?? '/api/waitlist';
 
 /** Stake bounds — PRD F-ST-1: $2–$25 USDC inclusive. */
 export const stake = {

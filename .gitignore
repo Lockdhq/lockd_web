@@ -26,3 +26,6 @@ coverage/
 # build output
 dist/
 .astro/
+
+# waitlist signups (local JSONL store, see src/lib/waitlist.ts)
+/data/

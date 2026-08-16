@@ -1,0 +1,48 @@
+---
+/**
+ * The lockd brand mark — the same vector geometry as the mobile app's
+ * `LogoMark` (see src/brand/logo.ts). `mark` is the padlock alone; `wordmark`
+ * renders LOCKD with the padlock as the O.
+ */
+import {
+  PADLOCK_ASPECT,
+  PADLOCK_PATH,
+  PADLOCK_VIEW_BOX,
+  WORDMARK_ASPECT,
+  WORDMARK_LETTERS_PATH,
+  WORDMARK_PADLOCK_OFFSET_X,
+  WORDMARK_VIEW_BOX,
+} from '../brand/logo';
+
+interface Props {
+  variant?: 'mark' | 'wordmark';
+  height?: number;
+  class?: string;
+}
+
+const { variant = 'wordmark', height = 22, class: className = '' } = Astro.props;
+const isWordmark = variant === 'wordmark';
+const viewBox = isWordmark ? WORDMARK_VIEW_BOX : PADLOCK_VIEW_BOX;
+const width = Math.round(height * (isWordmark ? WORDMARK_ASPECT : PADLOCK_ASPECT));
+---
+
+<svg
+  class:list={['logo-mark', className]}
+  width={width}
+  height={height}
+  viewBox={`0 0 ${viewBox.width} ${viewBox.height}`}
+  role="img"
+  aria-label="lockd"
+>
+  {isWordmark && <path d={WORDMARK_LETTERS_PATH} fill="currentColor" fill-rule="evenodd" />}
+  <g transform={isWordmark ? `translate(${WORDMARK_PADLOCK_OFFSET_X}, 0)` : undefined}>
+    <path d={PADLOCK_PATH} fill="var(--accent)" fill-rule="evenodd" />
+  </g>
+</svg>
+
+<style>
+  .logo-mark {
+    display: block;
+    color: var(--text);
+  }
+</style>

@@ -4,10 +4,10 @@
  * ASSUMPTION: waitlist. No store or TestFlight URL exists in any source, and
  * shipping a fake one would be an invented claim.
  *
- * With PUBLIC_WAITLIST_ENDPOINT set, this posts a real form (and enhances to a
- * fetch so the page doesn't navigate). With it unset it renders an honest mailto
- * link instead of a form that silently goes nowhere — a form that pretends to
- * submit is worse than no form.
+ * Posts to /api/waitlist by default (see src/data/site.ts) and enhances to a
+ * fetch so the page doesn't navigate. The mailto link only shows up if
+ * PUBLIC_WAITLIST_ENDPOINT is explicitly set to an empty string — a manual
+ * escape hatch, not the default path.
  */
 import { site, waitlistEndpoint } from '../data/site';
 
