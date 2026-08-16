@@ -5,7 +5,8 @@
  *   2. "We'll verify from workouts you already track"
  * Do not paraphrase either. Provider list from fitness-oracle.md §7.
  */
-import { providers } from '../data/site';
+import { Image } from 'astro:assets';
+import { providers } from '../data/providers';
 ---
 
 <section id="verification" class="section verify">
@@ -34,7 +35,15 @@ import { providers } from '../data/site';
         {
           providers.map((p) => (
             <li class="verify-item">
-              <span class="verify-dot" aria-hidden="true" />
+              <span class="verify-icon" aria-hidden="true">
+                {p.icon.kind === 'svg' ? (
+                  <svg viewBox={p.icon.viewBox} width="20" height="20" fill={p.icon.color}>
+                    <path d={p.icon.path} />
+                  </svg>
+                ) : (
+                  <Image src={p.icon.src} alt="" width={28} height={28} />
+                )}
+              </span>
               <div>
                 <p class="verify-name">{p.name}</p>
                 <p class="verify-desc t-caption">{p.note}</p>
@@ -86,13 +95,21 @@ import { providers } from '../data/site';
     border-color: var(--border-strong);
   }
 
-  .verify-dot {
-    width: 10px;
-    height: 10px;
-    margin-top: 7px;
-    border-radius: 50%;
-    background: var(--accent);
+  .verify-icon {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-md);
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
     flex: none;
+  }
+
+  .verify-icon :global(img) {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
   }
 
   .verify-name {

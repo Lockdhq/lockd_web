@@ -108,22 +108,6 @@ const outcomes = [
     overflow: hidden;
   }
 
-  .outcome::after {
-    content: '';
-    position: absolute;
-    inset-block: 0;
-    inset-inline-start: 0;
-    width: 3px;
-  }
-
-  .outcome-cracked::after {
-    background: var(--accent);
-  }
-
-  .outcome-locked-out::after {
-    background: var(--danger);
-  }
-
   .outcome-top {
     display: grid;
     grid-template-columns: auto 1fr;

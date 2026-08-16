@@ -29,13 +29,3 @@ export const stake = {
   default: 10,
   presets: [5, 10, 15, 25],
 } as const;
-
-/**
- * Verification sources — fitness-oracle.md §7 provider matrix.
- * Read-only. Lockd does not write activity to any of these.
- */
-export const providers = [
-  { name: 'Strava', note: 'Runs, rides and gym sessions you already post' },
-  { name: 'Apple Health', note: 'Whatever your iPhone and Watch already record' },
-  { name: 'Health Connect', note: 'The Android hub your tracker already writes to' },
-] as const;
