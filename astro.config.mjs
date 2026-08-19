@@ -1,6 +1,6 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
-import node from '@astrojs/node';
+import vercel from '@astrojs/vercel';
 
 // https://astro.build/config
 export default defineConfig({
@@ -9,7 +9,7 @@ export default defineConfig({
   // prerendering (see `export const prerender = true` in src/pages/index.astro)
   // so the marketing page itself ships as static HTML.
   output: 'server',
-  adapter: node({ mode: 'standalone' }),
+  adapter: vercel(),
   build: {
     // Ship one stylesheet rather than a <style> tag per component.
     inlineStylesheets: 'auto',
